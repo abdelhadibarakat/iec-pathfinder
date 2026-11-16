@@ -1,0 +1,359 @@
+<!-- =====================================================================
+ * Copyright (c) 2026 Abdelhadi Barakat. All Rights Reserved.
+ * Project: IEC Academic Advisor (PathFinder)
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * Unauthorized duplication, redistribution, or mirroring of this 
+ * web portal interface is strictly prohibited under international copyright law.
+ * ===================================================================== -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IEC Academic Advisor</title>
+
+    <!-- [SECTION 1: FONTS & FRAMEWORKS] -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@700;800&display=block" rel="stylesheet">
+    
+    <!-- [SECTION 2: LOCAL STYLES & SCRIPTS] -->
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body class="min-h-screen bg-white flex flex-col m-0 p-0 overflow-x-hidden">
+
+    <!-- [SECTION 3: FULL SCREEN WRAPPER] -->
+    <div class="w-full flex-1 flex flex-col bg-white fade-in">
+        
+        <!-- [SECTION 4: TOP ANIMATED HEADER] -->
+        <div class="header-gradient header-exact text-white">
+            <div id="header-box" class="header-box">
+                <div id="top-back-btn" class="left-arrow-column" onclick="goBack()" title="Back">
+                    <button class="tall-arrow-btn" type="button" aria-label="Go Back">
+                        <svg viewBox="0 0 24 48" fill="none" stroke="currentColor" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16,8 6,24 16,40"></polyline>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="title-group">
+                    <div id="badge-row" class="flex items-center gap-3 mb-4 transition-all duration-1800">
+                        <div class="bg-white text-[#0077cc] px-3.5 py-1.5 rounded-xl font-black text-sm shadow-sm">IEC</div>
+                        <span class="font-extrabold text-sm uppercase tracking-widest text-blue-100">PathFinder</span>
+                    </div>
+                    <h1 id="step-title" class="text-4xl sm:text-5xl font-extrabold tracking-tight">Student Profile</h1>
+                </div>
+            </div>
+
+            <!-- Glowing Gold Bottom Progress Bar -->
+            <div class="header-progress-container">
+                <div id="header-progress-fill" class="progress-fill-line"></div>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 1: STUDENT PROFILE & GENDER
+             ========================================== -->
+        <div id="step-1" class="step-view flex-1 px-4 py-8 sm:px-10 sm:py-12 flex flex-col items-center">
+            <div class="w-full max-w-2xl flex flex-col flex-1 justify-between">
+                <div class="flex flex-col gap-4 mb-6">
+                    
+                    <!-- Locked 2 Columns on all devices -->
+                    <div class="grid grid-cols-2 gap-3 sm:gap-4 w-full">
+                        <div class="floating-group" id="group-first-name">
+                            <input 
+                                type="text" 
+                                id="first-name" 
+                                name="fn_input_field"
+                                class="input-field apple-corner" 
+                                placeholder=" " 
+                                autocomplete="off"
+                                autocorrect="off" 
+                                autocapitalize="none"
+                                spellcheck="false"
+                            >
+                            <label for="first-name" class="floating-label">First Name</label>
+                        </div>
+
+                        <div class="floating-group" id="group-last-name">
+                            <input 
+                                type="text" 
+                                id="last-name" 
+                                name="ln_input_field"
+                                class="input-field apple-corner" 
+                                placeholder=" " 
+                                autocomplete="off"
+                                autocorrect="off" 
+                                autocapitalize="none"
+                                spellcheck="false"
+                            >
+                            <label for="last-name" class="floating-label">Last Name</label>
+                        </div>
+                    </div>
+
+                    <!-- Gender Selection Container (Hidden in Edit Name Mode) -->
+                    <div id="gender-selection-container" class="flex flex-col gap-4 w-full">
+                        <!-- Male Button -->
+                        <button type="button" id="card-male" class="gender-card male apple-corner font-extrabold text-xl fade-in delay-2" onclick="selectGender('male')">
+                            <span class="gender-text">Male</span>
+                            <div class="continue-indicator text-lg">
+                                <span id="label-gender-male">Next</span>
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                </svg>
+                            </div>
+                        </button>
+
+                        <!-- Female Button -->
+                        <button type="button" id="card-female" class="gender-card female apple-corner font-extrabold text-xl fade-in delay-3" onclick="selectGender('female')">
+                            <span class="gender-text">Female</span>
+                            <div class="continue-indicator text-lg">
+                                <span id="label-gender-female">Next</span>
+                                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                                </svg>
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- Single Confirm Button (Only Visible in Edit Name Mode) -->
+                    <div id="edit-name-confirm-container" class="w-full hidden fade-in delay-2">
+                        <button type="button" class="btn-step-action is-continue apple-corner font-extrabold text-xl" onclick="saveEditedName()">
+                            <span>Confirm</span>
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </button>
+                    </div>
+
+                </div>
+
+                <p class="text-center text-xs text-slate-400 font-semibold mt-auto pt-8 w-full">&copy; 2026 Abdelhadi Barakat. All rights reserved.</p>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 2: GRADE & SECTION SELECTOR (A / B / C)
+             ========================================== -->
+        <div id="step-2" class="step-view hidden flex-1 px-4 py-8 sm:px-10 sm:py-12 flex flex-col items-center">
+            <div class="w-full max-w-2xl flex flex-col flex-1 justify-between">
+                <div class="flex flex-col gap-4 mb-6">
+                    
+                    <!-- Grade 10 -->
+                    <div id="card-10" class="card apple-corner font-extrabold text-xl" onclick="toggleGradeCard(10)">
+                        <span class="grade-text">Grade 10</span>
+                        <div class="press-text">
+                            <span>Select</span>
+                            <span class="press-dot"></span>
+                        </div>
+
+                        <div class="section-group">
+                            <button type="button" class="section-btn" onclick="chooseSection(event, 10, 'A')">A</button>
+                            <button type="button" class="section-btn" onclick="chooseSection(event, 10, 'B')">B</button>
+                            <button type="button" class="section-btn" onclick="chooseSection(event, 10, 'C')">C</button>
+                        </div>
+                    </div>
+
+                    <!-- Grade 11 -->
+                    <div id="card-11" class="card apple-corner font-extrabold text-xl" onclick="toggleGradeCard(11)">
+                        <span class="grade-text">Grade 11</span>
+                        <div class="press-text">
+                            <span>Select</span>
+                            <span class="press-dot"></span>
+                        </div>
+
+                        <div class="section-group">
+                            <button type="button" class="section-btn" onclick="chooseSection(event, 11, 'A')">A</button>
+                            <button type="button" class="section-btn" onclick="chooseSection(event, 11, 'B')">B</button>
+                            <button type="button" class="section-btn" onclick="chooseSection(event, 11, 'C')">C</button>
+                        </div>
+                    </div>
+
+                    <!-- Grade 12 -->
+                    <div id="card-12" class="card apple-corner font-extrabold text-xl" onclick="toggleGradeCard(12)">
+                        <span class="grade-text">Grade 12</span>
+                        <div class="press-text">
+                            <span>Select</span>
+                            <span class="press-dot"></span>
+                        </div>
+
+                        <div class="section-group">
+                            <button type="button" class="section-btn" onclick="chooseSection(event, 12, 'A')">A</button>
+                            <button type="button" class="section-btn" onclick="chooseSection(event, 12, 'B')">B</button>
+                            <button type="button" class="section-btn" onclick="chooseSection(event, 12, 'C')">C</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <p class="text-center text-xs text-slate-400 font-semibold mt-auto pt-8 w-full">&copy; 2026 Abdelhadi Barakat. All rights reserved.</p>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 3: SELECT COURSES
+             ========================================== -->
+        <div id="step-3" class="step-view hidden flex-1 px-4 py-8 sm:px-10 sm:py-12 flex flex-col items-center fade-in">
+            <div class="w-full max-w-2xl flex flex-col flex-1 justify-between">
+                <div>
+                    <!-- Top Navigation Row: Category Pills + Search Button -->
+                    <div class="top-nav-row mb-6">
+                        <div id="stepper-tab-container" class="progress-tab-wrapper"></div>
+                        <button 
+                            type="button" 
+                            id="btn-standalone-search" 
+                            class="btn-outside-search" 
+                            onmousedown="toggleSearchMode()"
+                            title="Search Courses"
+                        >
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Search Bar View -->
+                    <div id="search-view-container" class="mb-4 hidden">
+                        <div class="search-standalone-box">
+                            <svg class="absolute left-4 w-6 h-6 text-amber-500 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                            </svg>
+                            <input 
+                                type="text" 
+                                id="course-search-input" 
+                                class="search-bar-input" 
+                                placeholder="Search for any course..." 
+                                onfocus="handleSearchFocus()" 
+                                onblur="handleSearchBlur(event)"
+                                oninput="handleSearchInput(this.value)"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Interactive Courses Container -->
+                    <div id="active-category-list" class="space-y-3 courses-viewport custom-scroll mb-6" onscroll="handleListScroll()"></div>
+
+                    <!-- Single Full-Width Action Button -->
+                    <div class="w-full">
+                        <button 
+                            type="button" 
+                            id="btn-global-action" 
+                            class="btn-step-action is-skip apple-corner font-extrabold text-xl" 
+                            onmousedown="handleGlobalAction()"
+                        >
+                            <span id="global-btn-label">Skip</span>
+                            <svg id="global-btn-icon" class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-center text-xs text-slate-400 font-semibold mt-auto pt-8 w-full">&copy; 2026 Abdelhadi Barakat. All rights reserved.</p>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 4: EXTERNAL EXAMS
+             ========================================== -->
+        <div id="step-4" class="step-view hidden flex-1 px-4 py-8 sm:px-10 sm:py-12 flex flex-col items-center fade-in">
+            <div class="w-full max-w-2xl flex flex-col flex-1 justify-between">
+                <div>
+                    <!-- Collapsible Section Header (Matches App Subtext Theme) -->
+                    <div id="external-subtext-wrap" class="text-center px-1 summary-subtext-collapse">
+                        <span class="text-xs font-extrabold text-[#8799a8] uppercase tracking-wider">
+                            Which courses will you test for?
+                        </span>
+                    </div>
+
+                    <!-- Courses Container (Uses Step 3's courses-viewport) -->
+                    <div class="mb-6 fade-in delay-1">
+                        <div id="external-courses-list" class="space-y-3 courses-viewport custom-scroll">
+                            <!-- Injected dynamically via renderExternalExamCards() -->
+                        </div>
+                    </div>
+
+                    <!-- Single Full-Width Action Button -->
+                    <div class="w-full fade-in delay-2">
+                        <button 
+                            type="button" 
+                            id="btn-external-action" 
+                            class="btn-step-action is-skip apple-corner font-extrabold text-xl" 
+                            onmousedown="handleExternalAction(event)"
+                        >
+                            <span id="external-btn-label">Skip</span>
+                            <svg id="external-btn-icon" class="w-6 h-6 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-center text-xs text-slate-400 font-semibold mt-auto pt-8 w-full">&copy; 2026 Abdelhadi Barakat. All rights reserved.</p>
+            </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 5: SUMMARY & CONFIRM
+             ========================================== -->
+        <div id="step-5" class="step-view hidden flex-1 px-4 py-8 sm:px-10 sm:py-12 flex flex-col items-center fade-in">
+            <div class="w-full max-w-2xl flex flex-col flex-1 justify-between">
+                <div>
+                    <!-- Collapsible Section Header Text -->
+                    <div id="summary-subtext-wrap" class="text-center px-1 summary-subtext-collapse">
+                        <span class="text-xs font-extrabold text-[#8799a8] uppercase tracking-wider">
+                            Tap any item to edit
+                        </span>
+                    </div>
+
+                    <!-- Option 1 Layout: Full Name on Top + 2 Split Buttons Below -->
+                    <div id="summary-cards-container" class="flex flex-col gap-3 mb-4 fade-in delay-1">
+                        <!-- Top Full-Width Name Button (Centered, No Edit Text) -->
+                        <button type="button" id="preview-name-card" class="summary-btn-name apple-corner w-full flex items-center justify-center" onclick="editFromSummary(1)" title="Click to edit name">
+                            <span id="preview-name" class="font-extrabold text-xl truncate text-center">Sarah Jenkins</span>
+                        </button>
+
+                        <!-- Bottom Split Row -->
+                        <div class="grid grid-cols-2 gap-3 w-full">
+                            <!-- Gender Button -->
+                            <button type="button" id="preview-gender-card" class="gender-card apple-corner font-extrabold text-xl py-3 flex items-center justify-center" onclick="toggleGenderOnSummary(event)" title="Tap to switch gender">
+                                <span id="preview-gender-text" class="gender-text text-center">Female</span>
+                            </button>
+
+                            <!-- Grade & Section Button -->
+                            <button type="button" id="preview-grade-card" class="card apple-corner font-extrabold text-xl py-3 flex items-center justify-center" onclick="editFromSummary(2)" title="Tap to edit grade & section">
+                                <span id="preview-grade-text" class="grade-text text-center">12A</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Courses Preview -->
+                    <div class="mb-4 fade-in delay-2">
+                        <div id="preview-course-list" class="space-y-3 summary-viewport custom-scroll"></div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="w-full fade-in delay-3">
+                        <button 
+                            type="button" 
+                            id="btn-final-submit" 
+                            class="btn-step-action is-continue apple-corner font-extrabold text-xl" 
+                            onclick="submitFinalEnrollment()"
+                        >
+                            <span id="submit-btn-text">Submit</span>
+                            <svg id="submit-btn-icon" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <p class="text-center text-xs text-slate-400 font-semibold mt-auto pt-8 w-full">&copy; 2026 Abdelhadi Barakat. All rights reserved.</p>
+            </div>
+        </div>
+
+</body>
+</html>

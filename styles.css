@@ -1,0 +1,1105 @@
+/* =====================================================================
+ * Copyright (c) 2026 Abdelhadi Barakat. All Rights Reserved.
+ * Project: IEC Academic Advisor (PathFinder)
+ * 
+ * PROPRIETARY AND CONFIDENTIAL
+ * Design systems, animations, layout architecture, and styling rules.
+ * Unauthorized reproduction or reuse is strictly prohibited.
+ * ===================================================================== */
+/* ==========================================
+   1. GLOBAL RESET & SCROLLBAR STABILITY
+   ========================================== */
+html {
+    scrollbar-gutter: stable;
+    overflow-y: scroll;
+    touch-action: pan-y; /* Prevents double-tap zooming on mobile */
+    -webkit-text-size-adjust: 100%;
+}
+
+body { 
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    overflow-x: hidden;
+    user-select: none; /* Prevents accidental desktop blue highlighting */
+    -webkit-user-select: none;
+    touch-action: pan-y;
+}
+
+/* Allow text selection ONLY when typing inside inputs */
+input, textarea {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+}
+
+.apple-corner { 
+    border-radius: 1.25rem; 
+}
+
+/* ==========================================
+   2. ENTRANCE FADE-IN ANIMATIONS (PURE OPACITY, ZERO MOVEMENT)
+   ========================================== */
+.fade-in { 
+    animation: popIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) backwards; 
+}
+
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+
+@keyframes popIn { 
+    0% { 
+        opacity: 0; 
+        /* NO translateY, NO scale — card stays rock solid */
+    } 
+    100% { 
+        opacity: 1; 
+    } 
+}
+
+.step-view {
+    width: 100%;
+}
+
+/* ==========================================
+   3. HEADER CONTAINER & SYMMETRIC TIMINGS
+   ========================================== */
+@keyframes headerFlow {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.header-gradient {
+    background: linear-gradient(
+        -45deg,
+        #1d4ed8,
+        #2563eb,
+        #0ea5e9,
+        #38bdf8,
+        #1d4ed8
+    );
+    background-size: 400% 400%;
+    animation: headerFlow 8s ease infinite;
+}
+
+/* Mobile Padding */
+.header-exact {
+    padding: 3rem 1.25rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Desktop Exact Original Padding */
+@media (min-width: 640px) {
+    .header-exact {
+        padding: 3rem 2rem;
+    }
+}
+
+/* UNIFIED HEADER ENTITY */
+.header-box {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform-origin: center center; /* Step 1: Centered title scales from center */
+    transition: transform-origin 0.3s ease;
+}
+
+/* On Step 2+ (.played): Anchor scale to the exact left padding (-1.25rem) */
+.header-box.played {
+    transform-origin: -1.25rem center !important;
+}
+
+/* Scale proportionally on viewports narrower than iPhone 14 Pro Max (430px) */
+@media (max-width: 429px) {
+    .header-box {
+        transform: scale(calc(100vw / 430px));
+    }
+}
+
+/* ========================================================
+   ARROW COLUMN CONTAINER (HIDDEN ON STEP 1)
+   ======================================================== */
+.left-arrow-column {
+    position: absolute;
+    left: -1.25rem; /* Matches mobile padding */
+    top: -3rem;
+    bottom: -3rem;
+    width: 0;
+    overflow: hidden;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    pointer-events: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 1.0s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 10;
+}
+
+/* Desktop Exact Original Left Anchor */
+@media (min-width: 640px) {
+    .left-arrow-column {
+        left: -2rem;
+    }
+}
+
+/* Mobile Arrow Box Width */
+.header-box.played .left-arrow-column {
+    width: 6.5rem;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Desktop Exact Original Width */
+@media (min-width: 640px) {
+    .header-box.played .left-arrow-column {
+        width: 10rem;
+    }
+}
+
+.tall-arrow-btn {
+    background: none;
+    border: none;
+    outline: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Exact Original SVG Size for all displays */
+.tall-arrow-btn svg {
+    width: 4rem;
+    height: 10rem;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), stroke 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .left-arrow-column:hover .tall-arrow-btn svg {
+        stroke: #fef08a;
+        transform: scale(1.15);
+    }
+}
+
+.left-arrow-column:active .tall-arrow-btn svg {
+    transform: scale(0.92) !important;
+    stroke: #fef08a;
+}
+
+.title-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+    white-space: nowrap;
+    transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Mobile Title Shift */
+.header-box.played .title-group {
+    align-items: flex-start;
+    text-align: left;
+    transform: translateX(5.25rem);
+}
+
+/* Desktop Exact Original Shift */
+@media (min-width: 640px) {
+    .header-box.played .title-group {
+        transform: translateX(8.5rem);
+    }
+}
+
+/* ==========================================
+   4. INPUT FIELDS & FLOATING LABELS
+   ========================================== */
+.floating-group {
+    position: relative;
+    width: 100%;
+    height: 4.5rem;
+    display: grid;
+    place-items: center;
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    transform: translateZ(0);
+}
+
+.input-field {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    background: #ffffff;
+    border: 2px solid #fcd34d;
+    border-radius: 1.25rem;
+    padding: 0 1.25rem;
+    font-family: inherit;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #d97706;
+    text-align: center;
+    line-height: normal;
+    outline: none;
+    box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.15);
+    transition: box-shadow 0.25s ease, transform 0.2s ease, background-color 0.25s ease;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.input-field:focus {
+    border-color: #fcd34d;
+    box-shadow: 0 10px 24px -2px rgba(252, 211, 77, 0.45);
+    transform: scale(1.015);
+}
+
+.floating-label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform-origin: center center;
+    transform: translate3d(-50%, -50%, 0);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fcd34d !important;
+    pointer-events: none;
+    white-space: nowrap;
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), 
+                opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    will-change: transform;
+}
+
+.input-field:focus ~ .floating-label,
+.input-field:not(:placeholder-shown) ~ .floating-label {
+    transform: translate3d(-50%, -2.25rem, 0) scale(0.58);
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    color: #fcd34d !important;
+    opacity: 0.95;
+}
+
+/* ==========================================
+   5. GENDER CARDS (POPPING PASTEL THEME)
+   ========================================== */
+/* Update inside styles.css */
+.gender-card { 
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 1.25rem;
+    height: 5.25rem;
+    padding: 0 1.5rem !important; /* Reduced slightly from 2rem so long words don't squeeze */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    width: 100%;
+    overflow: visible; /* Prevents text clipping */
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.25s ease, 
+                border-color 0.25s ease,
+                background-color 0.25s ease; 
+}
+
+/* Male Palette */
+.gender-card.male { 
+    background-color: #f0f9ff;
+    border: 2px solid #7dd3fc; 
+    color: #0284c7;
+    box-shadow: 0 8px 20px -4px rgba(14, 165, 233, 0.15);
+}
+
+/* Female Palette */
+.gender-card.female { 
+    background-color: #fdf2f8;
+    border: 2px solid #f9a8d4; 
+    color: #db2777;
+    box-shadow: 0 8px 20px -4px rgba(236, 72, 153, 0.15);
+}
+
+/* Text on Left */
+.gender-card .gender-text {
+    position: static;
+    transform: none;
+}
+
+.gender-card .continue-indicator {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 700;
+    white-space: nowrap; /* Prevents word wrapping/chopping */
+    flex-shrink: 0;     /* Keeps the full button text & arrow visible */
+}
+
+/* Desktop Hover Pop Effect */
+@media (hover: hover) and (pointer: fine) {
+    .gender-card.male:hover {
+        border-color: #38bdf8;
+        transform: scale(1.02);
+        box-shadow: 0 15px 30px -5px rgba(14, 165, 233, 0.30);
+    }
+
+    .gender-card.female:hover {
+        border-color: #f472b6;
+        transform: scale(1.02);
+        box-shadow: 0 15px 30px -5px rgba(236, 72, 153, 0.30);
+    }
+}
+
+/* Click & Tap Spring Press */
+.gender-card:active { 
+    transform: scale(0.97) !important; 
+    box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ==========================================
+   6. STEP 2: GRADE CARDS (STEADY PASTEL & NO DARKENING)
+   ========================================== */
+.card { 
+    box-sizing: border-box;
+    position: relative;
+    background-color: #fffbeb;
+    border: 2px solid #fde68a; 
+    color: #d97706; 
+    border-radius: 1.25rem;
+    height: 5.25rem;
+    width: 100%;
+    padding: 0 1.5rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    overflow: hidden;
+    box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.15);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.2s ease, 
+                border-color 0.2s ease; 
+}
+
+@media (min-width: 640px) {
+    .card {
+        padding: 0 2rem !important;
+    }
+}
+
+/* Hover: Keep identical light background, only lighten border and scale slightly */
+@media (hover: hover) and (pointer: fine) {
+    .card:not(.active):hover { 
+        transform: scale(1.02); 
+        border-color: #f59e0b;
+        box-shadow: 0 12px 24px -4px rgba(245, 158, 11, 0.25);
+    }
+}
+
+.card:not(.active):active { 
+    transform: scale(0.97) !important; 
+}
+
+/* Fix: Make children transparent to clicks so the card always triggers */
+.grade-text,
+.press-text,
+.press-dot {
+    pointer-events: none;
+}
+
+.grade-text {
+    font-weight: 800;
+    font-size: 1.25rem;
+    transition: opacity 0.2s ease;
+}
+
+.press-text {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #d97706;
+    transition: opacity 0.2s ease;
+}
+
+.press-dot {
+    width: 0.65rem;
+    height: 0.65rem;
+    border-radius: 9999px;
+    background-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+}
+
+/* Active State: Preserves light background with bright focus glow */
+.card.active {
+    background-color: #fffbeb;
+    border-color: #fcd34d;
+    box-shadow: 0 10px 24px -2px rgba(252, 211, 77, 0.45);
+    transform: scale(1.015);
+    cursor: default;
+}
+
+.card.active .grade-text,
+.card.active .press-text {
+    opacity: 0 !important;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* ---------------- Segmented Pills Inside Card ---------------- */
+.section-group {
+    position: absolute;
+    inset: 0.45rem;
+    display: flex;
+    gap: 0.45rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+}
+
+/* Fix: Force section group to be visible and clickable */
+.card.active .section-group {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+.section-btn {
+    flex: 1;
+    height: 100%;
+    background-color: #ffffff;
+    border: 2px solid #fde68a;
+    border-radius: 0.95rem;
+    color: #d97706;
+    font-weight: 800;
+    font-size: 1.35rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .section-btn:hover {
+        border-color: #f59e0b;
+        transform: scale(1.04);
+        box-shadow: 0 6px 14px -2px rgba(245, 158, 11, 0.25);
+        z-index: 2;
+    }
+}
+
+.section-btn:active,
+.section-btn.selected {
+    transform: scale(0.95) !important;
+    border-color: #f59e0b;
+    background-color: #ffffff;
+    color: #d97706;
+}
+
+/* ==========================================
+   7. ERROR STATES & MICRO-POP
+   ========================================== */
+@keyframes microSnap {
+    0%   { transform: scale3d(1, 1, 1); }
+    40%  { transform: scale3d(1.02, 1.02, 1); }
+    100% { transform: scale3d(1, 1, 1); }
+}
+
+.floating-group.animate-error {
+    animation: microSnap 0.22s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+}
+
+.floating-group.error-state .input-field {
+    border-color: #ef4444 !important;
+    background-color: #fef2f2 !important;
+    color: #ef4444 !important;
+    box-shadow: 0 8px 20px -4px rgba(239, 68, 68, 0.2) !important;
+}
+
+.floating-group.error-state .floating-label {
+    color: #ef4444 !important;
+}
+
+.floating-group.error-state .input-field:focus {
+    border-color: #fcd34d !important;
+    background-color: #ffffff !important;
+    color: #d97706 !important;
+    box-shadow: 0 10px 24px -2px rgba(252, 211, 77, 0.45) !important;
+}
+
+.floating-group.error-state .input-field:focus ~ .floating-label {
+    color: #fcd34d !important;
+}
+
+/* ==========================================
+   8. STEP 3: COURSE SELECTOR & SEARCH
+   ========================================== */
+.top-nav-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.progress-tab-wrapper {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.45rem;
+    background-color: #fffbeb;
+    padding: 0.45rem;
+    border-radius: 1.25rem;
+    border: 2px solid #fde68a;
+    box-sizing: border-box;
+}
+
+.progress-tab {
+    flex: 1;
+    height: 3.5rem;
+    background-color: #ffffff;
+    border: 2px solid #fde68a;
+    border-radius: 0.95rem;
+    color: #d97706;
+    font-weight: 800;
+    font-size: 1.05rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease, color 0.15s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .progress-tab:not(.active):hover {
+        border-color: #f59e0b;
+        transform: scale(1.015) !important;
+        box-shadow: 0 4px 12px -2px rgba(245, 158, 11, 0.25);
+        z-index: 2;
+    }
+}
+
+.progress-tab:active {
+    transform: scale(0.97) !important;
+}
+
+.progress-tab.active {
+    transform: scale(1) !important;
+    border-color: #f59e0b;
+    background-color: #ffffff;
+    color: #d97706;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+}
+
+/* Standalone Outside Search & Solo Tab (Controlled micro-scale so it never overlaps the search button) */
+.btn-outside-search {
+    width: 4.4rem;
+    height: 4.4rem;
+    border-radius: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fffbeb;
+    border: 2px solid #fde68a;
+    color: #d97706;
+    box-shadow: 0 2px 6px rgba(245, 158, 11, 0.08);
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    transform: scale(1);
+    transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.btn-outside-search svg {
+    flex-shrink: 0 !important;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-outside-search:not(.active):hover {
+        border-color: #f59e0b;
+        transform: scale(1.01) !important;
+        box-shadow: 0 4px 14px rgba(245, 158, 11, 0.2);
+    }
+}
+
+.btn-outside-search:active {
+    transform: scale(0.97) !important;
+}
+
+.btn-outside-search.active {
+    border-color: #f59e0b;
+    background-color: #fffbeb;
+    color: #d97706;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+    transform: scale(1) !important;
+}
+
+/* Standalone Search Bar Container & Input */
+.search-standalone-box {
+    position: relative;
+    width: 100%;
+    height: 4.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.search-standalone-box svg {
+    flex-shrink: 0 !important;
+}
+
+.search-bar-input {
+    width: 100%;
+    height: 100%;
+    background-color: #ffffff;
+    border: 2px solid #fde68a;
+    border-radius: 1.15rem;
+    padding: 0 1.5rem 0 3.5rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    outline: none;
+    box-shadow: 0 2px 6px 0 rgba(245, 158, 11, 0.05);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-bar-input:focus {
+    border-color: #f59e0b;
+    box-shadow: 0 4px 14px rgba(245, 158, 11, 0.2);
+}
+
+/* Regular Category Viewport */
+.courses-viewport {
+    max-height: 12.5rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Base Search List */
+.search-viewport {
+    max-height: 0;
+    opacity: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0 0.5rem 0 0.25rem;
+    margin-bottom: 0;
+    pointer-events: none;
+    transform: translateY(-4px);
+}
+
+/* Search Dropdown */
+.search-viewport.expanded {
+    max-height: 7.0rem;
+    opacity: 1;
+    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+    margin-bottom: 1.5rem;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* Dropdown Accordion Animation */
+.search-viewport.accordion-active {
+    transition: max-height 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.2s ease,
+                transform 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                margin-bottom 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+                padding 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Selectable Course Cards (Strict icon protection & locked geometry) */
+.selectable-course-card {
+    background-color: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 1.15rem;
+    height: 4.75rem;
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.04);
+    transform: none !important;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+}
+
+/* Enforce rigid icon bounds: emoji and icons will never shrink */
+.selectable-course-card .text-2xl,
+.selectable-course-card svg,
+.selectable-course-card .check-circle,
+.selectable-course-card span.shrink-0 {
+    flex-shrink: 0 !important;
+    min-width: max-content;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .selectable-course-card:not(.selected):not(.disabled):hover {
+        border-color: #cbd5e1;
+        background-color: #f8fafc;
+        box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.06);
+    }
+}
+
+.selectable-course-card:not(.disabled):active {
+    transform: scale(0.99) !important;
+}
+
+.selectable-course-card.selected {
+    background-color: #f0fdf4;
+    border-color: #86efac;
+    box-shadow: 0 4px 12px 0 rgba(34, 197, 94, 0.14);
+    transform: none !important;
+}
+
+.selectable-course-card.disabled {
+    background-color: #f8fafc;
+    border-color: #f1f5f9;
+    opacity: 0.45;
+    cursor: not-allowed;
+    filter: grayscale(0.6);
+    box-shadow: none;
+}
+
+.select-label-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0 !important;
+}
+
+.select-text-hint {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #94a3b8;
+    transition: color 0.15s ease;
+    flex-shrink: 0 !important;
+}
+
+.selectable-course-card.selected .select-text-hint {
+    color: #16a34a;
+}
+
+.check-circle {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    border: 2px solid #e2e8f0;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0 !important;
+    transition: all 0.15s ease;
+}
+
+.selectable-course-card.selected .check-circle {
+    background-color: #22c55e;
+    border-color: #16a34a;
+    color: #ffffff;
+}
+
+/* Action Button */
+.btn-step-action {
+    width: 100%;
+    height: 4.75rem;
+    border-radius: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    cursor: pointer;
+    user-select: none;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.btn-step-action svg {
+    flex-shrink: 0 !important;
+}
+
+/* Skip Text Color Fix: Explicitly matches #d97706 (Next / Finish) */
+.btn-step-action.is-skip {
+    background-color: #ffffff;
+    border: 2px dashed #fcd34d;
+    color: #d97706;
+    box-shadow: 0 4px 12px 0 rgba(245, 158, 11, 0.08);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-step-action.is-skip:hover {
+        background-color: #fffbeb;
+        border-style: solid;
+        border-color: #f59e0b;
+        color: #d97706;
+        transform: scale(1.01) !important;
+        box-shadow: 0 8px 24px 0 rgba(245, 158, 11, 0.22);
+    }
+}
+
+.btn-step-action.is-continue {
+    background-color: #fffbeb;
+    border: 2px solid #fcd34d;
+    color: #d97706;
+    box-shadow: 0 6px 18px 0 rgba(245, 158, 11, 0.18);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .btn-step-action.is-continue:hover {
+        border-color: #f59e0b;
+        transform: scale(1.01) !important;
+        box-shadow: 0 10px 28px 0 rgba(245, 158, 11, 0.3);
+    }
+}
+
+.btn-step-action:active { 
+    transform: scale(0.97) !important; 
+}
+
+/* Scrollbar Customization */
+.custom-scroll::-webkit-scrollbar { 
+    width: 6px; 
+}
+.custom-scroll::-webkit-scrollbar-track { 
+    background: #fffbeb; 
+    border-radius: 8px; 
+}
+.custom-scroll::-webkit-scrollbar-thumb { 
+    background: #fde68a; 
+    border-radius: 8px; 
+}
+
+/* ==========================================
+   PAGE & TAB SPRING ENTRANCE (PURE OPACITY, NO TRANSLATE)
+   ========================================== */
+.view-enter {
+    animation: springEnter 0.22s ease-out both;
+}
+
+.search-mode-enter {
+    animation: searchSurfaceEnter 0.22s ease-out both;
+}
+
+@keyframes springEnter {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes searchSurfaceEnter {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* ==========================================
+   9. STEP 4: SUMMARY & PROFILE BUTTONS
+   ========================================== */
+.summary-btn-name {
+    box-sizing: border-box;
+    width: 100%;
+    height: 4.75rem;
+    background-color: #fffbeb;
+    border: 2px solid #fde68a;
+    color: #d97706;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+    box-shadow: 0 8px 20px -4px rgba(245, 158, 11, 0.15);
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                box-shadow 0.2s ease, 
+                border-color 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .summary-btn-name:hover {
+        transform: scale(1.02);
+        border-color: #f59e0b;
+        box-shadow: 0 12px 24px -4px rgba(245, 158, 11, 0.25);
+    }
+}
+
+.summary-btn-name:active {
+    transform: scale(0.97) !important;
+}
+
+/* Step 4 Centered Gender and Grade cards */
+#preview-gender-card,
+#preview-grade-card {
+    height: 4.5rem;
+    justify-content: center;
+    padding: 0 1.25rem !important;
+}
+
+/* Smooth Collapse for "Tap any item to edit" */
+.summary-subtext-collapse {
+    max-height: 2.5rem;
+    opacity: 1;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.3s ease,
+                margin-bottom 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.summary-subtext-collapse.is-hidden {
+    max-height: 0;
+    opacity: 0;
+    margin-bottom: 0;
+}
+
+/* Viewport: 0 or 1 card flush full width */
+.summary-viewport.single-mode {
+    width: 100%;
+    max-height: none;
+    overflow: visible;
+    padding: 0;
+    margin-bottom: 0;
+}
+
+/* Viewport: 2+ courses with smooth scroll */
+.summary-viewport.is-scrollable {
+    width: 100%;
+    max-height: 7.6rem;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0.25rem 0.5rem 0.25rem 0.25rem;
+    margin-bottom: 0;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    touch-action: pan-y;
+}
+
+/* Standard Course Card */
+.course-badge-row-clickable {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: #ffffff;
+    border: 2px solid #e2e8f0;
+    border-radius: 1.15rem;
+    height: 4.75rem;
+    padding: 0 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+    box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.04);
+    transition: border-color 0.2s ease, 
+                background-color 0.2s ease, 
+                box-shadow 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .course-badge-row-clickable:hover {
+        border-color: #cbd5e1;
+        background-color: #f8fafc;
+        box-shadow: 0 4px 10px 0 rgba(0, 0, 0, 0.05);
+    }
+}
+
+.course-badge-row-clickable:active {
+    background-color: #f1f5f9;
+}
+
+/* Locked / Post-Submission Disabled State */
+.summary-locked {
+    pointer-events: none !important;
+    cursor: default !important;
+}
+
+/* Subtle Loading Pulse (Option A) */
+@keyframes submitPulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.72;
+        transform: scale(0.99);
+    }
+}
+
+.btn-step-action.is-submitting {
+    cursor: wait !important;
+    animation: submitPulse 1.2s ease-in-out infinite;
+}
+
+/* Success Button (Matching Theme, Green Palette) */
+.btn-step-action.is-success {
+    background-color: #ecfdf5 !important;
+    border: 2px solid #6ee7b7 !important;
+    color: #059669 !important;
+    box-shadow: 0 6px 18px 0 rgba(16, 185, 129, 0.18) !important;
+    cursor: default !important;
+    pointer-events: none !important;
+    transform: none !important;
+    animation: none !important;
+}
+
+/* Error Button (Matching Theme, Red Palette) */
+.btn-step-action.is-error {
+    background-color: #fef2f2 !important;
+    border: 2px solid #fca5a5 !important;
+    color: #dc2626 !important;
+    box-shadow: 0 6px 18px 0 rgba(239, 68, 68, 0.18) !important;
+}
+
+.animate-submit-shake {
+    animation: submitShake 0.26s cubic-bezier(0.25, 1, 0.5, 1) both;
+}
+
+.animate-submit-shake {
+    animation: submitShake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+/* ==========================================
+   10. PROGRESS BAR - SUNBURST GOLD
+   ========================================== */
+.header-progress-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3.5px;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 20;
+    overflow: visible;
+}
+
+.progress-fill-line {
+    height: 100%;
+    width: 25%;
+    background-color: #fde047;
+    border-radius: 0 9999px 9999px 0;
+    box-shadow: 0 0 8px rgba(253, 224, 71, 0.95), 0 0 18px rgba(253, 224, 71, 0.65);
+    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
